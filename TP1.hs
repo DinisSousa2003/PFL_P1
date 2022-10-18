@@ -43,11 +43,20 @@ reducePolinomial :: Polinomyal -> Polinomyal
 reducePolinomial p = filter (\(c, _)-> c /= 0) (sumEquals reduced)
                     where reduced = map reduceTerm p
 
+addPolinomial :: Polinomyal -> Polinomyal -> Polinomyal
+addPolinomial [] [] = []
+addPolinomial p1 [] = p1
+addPolinomial [] p2 = p2
+addPolinomial p1 p2 = reducePolinomial (p1 ++ p2)
+
 {-mutiply two polinomyals-}
+auxMultPolinomial :: Polinomyal -> Polinomyal -> Polinomyal
+auxMultPolinomial [] p2 = []
+auxMultPolinomial p1 [] = []
+auxMultPolinomial p1 (p2head : p2tail) = multPolinomialByElem p1 p2head ++ auxMultPolinomial p1 p2tail
+
 multPolinomial :: Polinomyal -> Polinomyal -> Polinomyal
-multPolinomial [] p2 = []
-multPolinomial p1 [] = []
-multPolinomial p1 (p2head : p2tail) = multPolinomialByElem p1 p2head ++ multPolinomial p1 p2tail
+multPolinomial p1 p2 = reducePolinomial(auxMultPolinomial p1 p2)
 
 {-mutiply all terms of a polinomyal by an element-}
 multPolinomialByElem :: Polinomyal -> PolElement -> Polinomyal
@@ -60,7 +69,11 @@ multPoliElem (c1, vg1) (c2, vg2) = reduceTerm ((c1 * c2), vg1 ++ vg2)
 {-deriving polinomials, need to reduce in the end-}
 derivePolinomial :: Polinomyal -> Char -> Polinomyal
 derivePolinomial [] _ = []
-derivePolinomial (phead : ptail) var = [deriveElem phead idx] ++ derivePolinomial ptail var
+derivePolinomial p var = reducePolinomial (auxDerivePolinomial p var)
+
+auxDerivePolinomial :: Polinomyal -> Char -> Polinomyal
+auxDerivePolinomial [] _ = []
+auxDerivePolinomial (phead : ptail) var = [deriveElem phead idx] ++ auxDerivePolinomial ptail var
             where idx = findVarElem phead var
 
 findVarElem :: PolElement -> Char -> Int
