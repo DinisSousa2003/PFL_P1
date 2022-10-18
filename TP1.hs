@@ -30,8 +30,17 @@ elemEqual p1 p2 | (length xs) /= (length ys) = False
                 where xs = snd (reduceTerm p1)
                       ys = snd (reduceTerm p2)
 
+removeItem :: PolElement -> Polinomyal -> Polinomyal 
+removeItem _ [] = []
+removeItem x (y:ys) | elemEqual x y = removeItem x ys
+                    | otherwise     = y : removeItem x ys
+
+sumEquals :: Polinomyal -> Polinomyal
+sumEquals [] = []
+sumEquals (x:xs) = [((fst x + sum [ k | (k,ks) <- xs, elemEqual x (k,ks)]),snd x)]  ++ sumEquals (removeItem x xs)
+
 reducePolinomial :: Polinomyal -> Polinomyal
-reducePolinomial p = reduced
+reducePolinomial p = filter (\(c, _)-> c /= 0) (sumEquals reduced)
                     where reduced = map reduceTerm p
 
 {-mutiply two polinomyals-}
