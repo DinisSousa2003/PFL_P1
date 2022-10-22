@@ -7,44 +7,47 @@ type Polinomyal = [PolElement]
 
 parseNewTerm :: PolElement -> String -> PolElement
 parseNewTerm el (' ':xs) = parseNewTerm el xs
-parseNewTerm (c, vg) (x:xs) | isDigit x = parseCoef1 (c * fromIntegral (digitToInt x), vg) xs
+parseNewTerm (c, vg) (x:xs) | isDigit x = parseCoef (c, vg) ([x] ++ xs)
                     | isLetter x = parseVariable (c, [(x, 0)])  xs
                     | otherwise  = (0, []) --inválido
 
---Can be terminal
-parseCoef1 :: PolElement -> String -> PolElement
-parseCoef1 el [] = el
-parseCoef1 (c, vg) (x:xs) | isDigit x = parseCoef1 (c*10 + fromIntegral (digitToInt x), vg) xs
-                       {-| x == '.' = parseCoef2  (c, vg) xs-}
-                       | x == '*' = parseMult (c, vg) xs
-                       | otherwise = (0, []) --inválido
 
---Can be terminal
-{-
-parseCoef2 :: PolElement -> String -> Float
-parseCoef2 el [] = el
-parseCoef2 (c, vg) (x:xs) | isDigit x = parseCoef2 (c*10 + (digitToInt x), vg) xs
-                       | x == '.' = parseCoef2  (c, vg) xs
-                       | x == '*' = parseMult (c, vg) xs
-                       | otherwise = (0, []) --inválido
--}
+parseCoef :: PolElement -> String -> PolElement
+parseCoef (c, vg) xs = parseEndCoef (c * (parseNum (takeWhile (\c -> isDigit c || (c == '.')) xs) 0), vg) (dropWhile (\c -> isDigit c || (c == '.')) xs)
+
+ --Can be terminal
+parseEndCoef :: PolElement -> String -> PolElement
+parseEndCoef el [] = el
+parseEndCoef el (x:xs) | x == '*' = parseMult el xs
+                       | otherwise = (0, [])  --inválido
 
 parseMult :: PolElement -> String -> PolElement
 parseMult (c, vg) (x:xs) | isLetter x = parseVariable (c, vg ++ [(x, 0)]) xs
+                         | otherwise = (0, [])  --inválido
 
 --Can be terminal
 parseVariable :: PolElement -> String -> PolElement
 parseVariable el [] = el
-parseVariable el (x:xs) | x == '^' = parseExp1 el xs
+parseVariable el (x:xs) | x == '^' = parseExp el xs
                        | otherwise = (0, [])  --inválido
 
-parseExp1 :: PolElement -> String -> PolElement
-parseExp1 (c, vg) (x:xs) | isDigit x = parseExp2 (c, init vg ++ [(fst (last vg), fromIntegral (digitToInt x) )]) xs
-                         | otherwise = (0, []) --inválido
+parseExp :: PolElement -> String -> PolElement
+parseExp (c, vg) xs = parseEndExp (c, init vg ++ [(fst (last vg), (parseNum (takeWhile (\c -> isDigit c || (c == '.')) xs) 0))]) (dropWhile (\c -> isDigit c || (c == '.')) xs)
+
 
 --Can be terminal
-parseExp2 :: PolElement -> String -> PolElement
-parseExp2 el [] = el
-parseExp2 (c, vg) (x:xs) | isDigit x = parseExp2 (c, init vg ++ [(fst (last vg), (snd (last vg) * 10) + fromIntegral (digitToInt x))]) xs
-                         | x == '*' = parseMult (c, vg) xs
-                         | otherwise = (0, []) -- inválido
+parseEndExp :: PolElement -> String -> PolElement
+parseEndExp el [] = el
+parseEndExp (c, vg) (x:xs) | x == '*' = parseMult (c, vg) xs
+                           | otherwise = (0, []) -- inválido
+
+
+parseDecimalNum :: String -> Int -> Float
+parseDecimalNum [] n = 0
+parseDecimalNum (x:xs) n = (fromIntegral (digitToInt x)) / (fromIntegral (10^n)) + (parseDecimalNum xs (n+1))
+
+--Recieves string with only the numeral part wanted to parse
+parseNum :: String -> Float -> Float
+parseNum [] n = n
+parseNum (x:xs) n   | isDigit x = parseNum xs (n*10 + (fromIntegral (digitToInt x)))
+                   | x == '.' = n + parseDecimalNum xs 1
