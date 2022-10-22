@@ -3,13 +3,8 @@ import Data.List
 type PolElement = (Double, [(Char, Double)]) {-Coeficient, variable, grade-}
 type Polinomyal = [PolElement]
 
-replaceAtIndex :: Int -> a -> [a] -> [a]    
+replaceAtIndex :: Int -> a -> [a] -> [a]
 replaceAtIndex idx elem xs = take idx xs ++ [elem] ++ drop (idx+1) xs
-
---createPoliElem :: Int -> [(Char, Int)] -> PolElement
-
---createPolinomyal :: PolElement -> Polinomyal
-
 
 {-reduce the variable and grade list-}
 fromListWith :: Fractional a => [(Char, a)] -> [(Char, a)]
@@ -25,12 +20,12 @@ reduceTerm (c,vg) = (c, filter (\(_, a)-> a /= 0) reduced)
 
 {-reduce the variable and grade list-}
 elemEqual :: PolElement -> PolElement -> Bool
-elemEqual p1 p2 | (length xs) /= (length ys) = False 
+elemEqual p1 p2 | (length xs) /= (length ys) = False
                 | otherwise = all (==True) [(xs !! i) == (ys !! i) | i <- [0..(length xs - 1)]]
                 where xs = snd (reduceTerm p1)
                       ys = snd (reduceTerm p2)
 
-removeItem :: PolElement -> Polinomyal -> Polinomyal 
+removeItem :: PolElement -> Polinomyal -> Polinomyal
 removeItem _ [] = []
 removeItem x (y:ys) | elemEqual x y = removeItem x ys
                     | otherwise     = y : removeItem x ys
@@ -63,7 +58,7 @@ multPolinomialByElem :: Polinomyal -> PolElement -> Polinomyal
 multPolinomialByElem p1 pElem = Data.List.map (multPoliElem pElem) p1
 
 {-mutiply two polynomials terms-}
-multPoliElem :: PolElement -> PolElement -> PolElement 
+multPoliElem :: PolElement -> PolElement -> PolElement
 multPoliElem (c1, vg1) (c2, vg2) = reduceTerm ((c1 * c2), vg1 ++ vg2)
 
 {-deriving polinomials, need to reduce in the end-}
@@ -84,5 +79,5 @@ findVarElem (c, vg) var = case idx of
 
 deriveElem :: PolElement -> Int -> PolElement
 deriveElem pol (-1) = pol
-deriveElem (c, vg) idx = (c * exp, replaceAtIndex idx (ch, exp - 1) vg) 
+deriveElem (c, vg) idx = (c * exp, replaceAtIndex idx (ch, exp - 1) vg)
                     where (ch, exp) = vg !! idx
