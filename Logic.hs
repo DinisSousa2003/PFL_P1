@@ -36,8 +36,30 @@ sumEquals [] = []
 sumEquals (x:xs) = [((fst x + sum [ k | (k,ks) <- xs, elemEqual x (k,ks)]),snd x)]  ++ sumEquals (removeItem x xs)
 
 reducePolinomial :: Polinomyal -> Polinomyal
-reducePolinomial p = filter (\(c, _)-> c /= 0) (sumEquals reduced)
+reducePolinomial p = sortBy (\a b -> compareTerms a b) (filter (\(c, _)-> c /= 0) (sumEquals reduced))
                     where reduced = map reduceTerm p
+
+compareTerms :: PolElement -> PolElement -> Ordering
+compareTerms (c1, xs) (c2, ys) | (length xs) /= (length ys) = compare (length ys) (length xs)
+                               | compareVG xs ys /= EQ = compare xs ys
+                               | otherwise = compareExp xs ys
+
+compareVG :: [(Char,Float)] -> [(Char,Float)] -> Ordering
+compareVG [] [] = EQ
+compareVG (x:xs) (y:ys) | (fst x) /= (fst y) = compare (fst x) (fst y)
+                        | otherwise = compareVG xs ys
+
+compareExp :: [(Char,Float)] -> [(Char,Float)] -> Ordering
+compareExp [] [] = EQ
+compareExp (x:xs) (y:ys) | (snd x) /= (snd y) = compare (snd y) (snd x)
+                         | otherwise = compareExp xs ys
+
+poliEquals :: Polinomyal -> Polinomyal -> Bool
+poliEquals p1 p2  | (length xs) /= (length ys) = False
+                  | otherwise = all (==EQ) [compareTerms (xs !! i) (ys !! i) | i <- [0..(length xs - 1)]]
+                  where xs = reducePolinomial p1
+                        ys = reducePolinomial p2
+
 
 addPolinomial :: Polinomyal -> Polinomyal -> Polinomyal
 addPolinomial [] [] = []
