@@ -1,0 +1,46 @@
+## Trabalho 1 PFL - G01_07
+
+### Dinis Sousa e Francisca Silva
+
+#### Escolha da representação interna dos polinómios:
+Os polinómios estão representados como uma lista de elementos de um polinómio (monómios). Estes elementos são representados por um par (coeficiente, lista de pares variável e grau). Escolhemos esta representação de forma a permitir que um elemento de um polinómio tivesse várias variáveis, cada uma com um grau diferente e ambos estivessem associados um ao outro num par. Cada elemento tem apenas um coeficiente e uma lista de variáveis e graus, logo associa-los também num par pareceu lógico. O polinómio ser um conjunto de monómios parte da definição de polinómio, e achamos que coloca-los numa lista seria uma boa opção.
+
+```hs
+type PolElement = (Float, [(Char, Float)]) {-Coeficient, variable, grade-}
+type Polinomyal = [PolElement]
+```
+
+#### Descrição de cada funcionalidade
+- Começando pela função de **normalizar polinómios**, esta ação é realizada pela função *reducePolinomial*. Primeiro todos os elementos são reduzidos (ou seja, x^2\*x^2 -> x^4). De seguida são filtrados todos os elementos que tenham o coeficiente 0, as variáveis que tenham expoente 0 são removidas (x^0 = 1, que é o elemento neutro da mutiplicação) e finalmente todos os *PolElement* que tenham uma lista de variáveis e graus iguais juntam-se no mesmo elemento e vêm os seus coeficientes somados.
+
+- A função de **adicionar polinómios** funciona de forma idêntica à de reduzir um polinómio. Na verdade, o ato de somar dois polinómios nada mais é do que juntar dois polinómios num só e reduzir o novo polinómio à forma normal. E foi exatamente isso que fizemos, na função *addPolinomial*.
+
+- Para a **mutiplicação de polinómios**, todos os membros de um polinómio 1 são mutiplicados por todos os membros de um polinómio 2. Então, dando uso da recursão, mutiplicamos cada termo do primeiro polinómio por cada termo do segundo polinómio. E em que consiste a mutiplicação de dois termos de um polinómio? Mutiplicam-se os coeficientes, e 'juntam-se' as variáveis, somando os graus das variáveis iguais. Para isto, usamos a função já definida para a redução de um *PolElement*, *reduceTerm*. Esta funcionalidade está implementada na função *multPolinomial*.
+
+- Por último, no que toca às funções obrigatórias, a função de **derivação de um polinómio**. Para derivar um polinómio, é primeiro preciso saber em função de que termo queremos derivar esse polinómio. Daí esta função receber como argumentos um char (a variável em ordem à qual queremos derivar) e um polinómio. Depois disso, é preciso verificar em cada membro do polinómio se a variável em ordem à qual estamos a derivar está presente. Se não estiver, não há nada a fazer, se estiver, reduz-se o grau do membro em uma unidade e mutiplica-se o coeficiente pelo antigo grau. Esta funcionalidade encontra-se implementada em *derivePolinomial*
+
+- Além das funcionalidade obrigatórias, temos ainda a destacar o **parse de uma string num polinómio**, através da função *parseInit*. Para isso, dada uma string, primeiro dividimos a string pelos seus '+' e '-' (exceto aqueles que vêm depois de um ^ de forma a permitir expoentes negativos). Assim, temos uma lista de strings em que cada uma representa um elemento de um polinómio. Depois disso, é feito o parse de cada termo, na função *parseNewTerm*. Dentro de cada termo, a leitura é feita numa ideia de 'máquina de estados'. Primeiro verifica-se de que forma é que começa o termo. Se o termo começar por um número (ou sinal, no caso de ser um número negativo), lê se até chegar ao primeiro termo não numérico e a informação é guardada no coeficiente. Com o resto da string, é feito o parse das variáveis e respetivos graus, sendo os graus lidos de forma similar aos coeficientes. Se o termo começar com uma letra, passa-se a parte do coeficiente à frente, sendo este colocado a 1.
+
+- Por último a função que nos permite escrever a informação guardada sobre os polinómios de uma forma legível ao utilizador, a função que **transforma o polinómio em string**, *polinomyalToString*. Cada elemento é transformado numa string, que começa pelo seu sinal, coeficiente e depois a escrita das variáveis e respetivo grau. Se o polinómio for nulo é devolvido 0.
+
+- Nota: Qualquer elemento do polinómio lido pode ter coeficiente ou expoente negativo, e os coeficientes e expoentes podem ser dados como decimais (ex.: -123.7).
+
+#### Exemplos de utilização do programa
+Para correr o programa, basta ter os ficheiros necessários no mesmo diretório do io.hs (Logic.hs, Parse.hs, Print.hs) e dar ao ficheiro io.hs (:l io.hs). De seguida basta escrever main, e irá aparecer na consola texto do programa, a interagir com o utilizador.
+
+**Exemplos de polinómios:**
+```
+1
+-3.10*x^2*y^7.3 + 2*x^2*x^3
+2*z^3
+```
+
+**Exemplos de utilização**
+- Redução e derivação
+![Reducing and deriving a polinomial](https://i.imgur.com/vMJGFu4.png)
+
+- Adição
+![Adding polinomials](https://i.imgur.com/1IFTRbN.png)
+
+- Mutiplicação
+![Mutiplying polinomials](https://i.imgur.com/byTGypS.png)
