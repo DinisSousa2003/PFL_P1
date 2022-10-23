@@ -29,9 +29,16 @@ splitTerms str = (first:(splitTerms rest))
 --Parse the string of an element into the element itself
 parseNewTerm :: String -> PolElement
 parseNewTerm (' ':xs) = parseNewTerm xs
-parseNewTerm (x:xs)   | isNum x = ((parseNum (takeWhile isNum (x:xs)) 0), (parseExp2 [] (dropWhile isNum (x:xs))))
+parseNewTerm (x:xs)   | isNum x = ((parseNum (takeWhile isNum (x:xs)) 0), (parseAfterCoef [] (dropWhile isNum (x:xs))))
                         | isLetter x = (1,parseVariable [(x, 1)] xs)
                         | otherwise  = error "Invalid Polynomial"
+
+--Called after the exponent is read (or after the coeficient), can be followed by nothing (last variable) or a '*'
+parseAfterCoef :: [(Char,Float)] -> String -> [(Char,Float)]
+parseAfterCoef el [] = el
+parseAfterCoef vg (x:xs) | x == '*' = parseMult vg xs
+                    | isLetter x = parseVariable [(x, 1)] xs
+                    | otherwise = error "Invalid Polynomial" -- inválido
 
 --Called after receiving '*', must be followed by a letter
 parseMult :: [(Char,Float)] -> String -> [(Char,Float)]
@@ -50,7 +57,7 @@ parseExp1 :: [(Char,Float)] -> String -> [(Char,Float)]
 parseExp1 vg (x:xs) | isNum x = parseExp2 (init vg ++ [(fst (last vg), (parseNum (takeWhile isNum (x:xs)) 0) )]) (dropWhile isNum (x:xs))
                     | otherwise = error "Invalid Polynomial" --inválido
 
---Called after the exponent is read (or after the coeficient), can be followed by nothing (last variable) or a '*'
+--Called after the exponent is read, can be followed by nothing (last variable) or a '*'
 parseExp2 :: [(Char,Float)] -> String -> [(Char,Float)]
 parseExp2 el [] = el
 parseExp2 vg (x:xs) | x == '*' = parseMult vg xs

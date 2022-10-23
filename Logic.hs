@@ -97,7 +97,13 @@ multPoliElem (c1, vg1) (c2, vg2) = reduceTerm ((c1 * c2), vg1 ++ vg2)
 {-Derive a polynomial in order to a given variable-}
 derivePolynomial :: Polynomial -> Char -> Polynomial
 derivePolynomial [] _ = []
-derivePolynomial p var = reducePolynomial (auxDerivePolynomial p var)
+derivePolynomial p var = reducePolynomial (auxDerivePolynomial (removeIndependentTerm p) var)
+
+{-Remove all independent terms-}
+removeIndependentTerm :: Polynomial -> Polynomial
+removeIndependentTerm [] = []
+removeIndependentTerm poli | elemEqual (head poli) (1, []) = removeIndependentTerm(removeItem (head poli) poli)
+                           | otherwise = [head poli] ++ removeIndependentTerm (tail poli)
 
 {-Derive each term in order to the variable-}
 auxDerivePolynomial :: Polynomial -> Char -> Polynomial
