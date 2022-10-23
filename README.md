@@ -69,3 +69,6 @@ A primeira imagem mostra a mensagem de erro do teste:<br>
 
 A segunda é o resultado do teste e mostra o valor diferente(1.9000001 /= 1.9)<br>
 ![Reason of error](https://i.imgur.com/Kx9ZVGM.png)
+
+Quando os testes são bem sucedidos o resultado aparece neste formato:<br>
+![Correct result](https://i.imgur.com/wVOGITa.png)
