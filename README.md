@@ -3,7 +3,7 @@
 ### Dinis Sousa e Francisca Silva
 
 #### Escolha da representação interna dos polinómios:
-Os polinómios estão representados como uma lista de elementos de um polinómio (monómios). Estes elementos são representados por um par (coeficiente, lista de pares variável e grau). Escolhemos esta representação de forma a permitir que um elemento de um polinómio tivesse várias variáveis, cada uma com um grau diferente e ambos estivessem associados um ao outro num par. Cada elemento tem apenas um coeficiente e uma lista de variáveis e graus, logo associa-los também num par pareceu lógico. O polinómio ser um conjunto de monómios parte da definição de polinómio, e achamos que coloca-los numa lista seria uma boa opção.
+Os polinómios estão representados como uma lista de elementos de um polinómio (monómios). Estes elementos são representados por um par (coeficiente, lista de pares variável e grau). Escolhemos esta representação de forma a permitir que um elemento de um polinómio tivesse várias variáveis, cada uma com um grau diferente e ambos estivessem associados um ao outro num par. Cada elemento tem apenas um coeficiente e uma lista de variáveis e graus, logo associá-los também num par pareceu lógico. O polinómio ser um conjunto de monómios parte da definição de polinómio, e achamos que coloca-los numa lista seria uma boa opção.
 
 ```hs
 type PolElement = (Float, [(Char, Float)]) {-Coeficient, variable, grade-}
@@ -11,7 +11,7 @@ type Polinomyal = [PolElement]
 ```
 
 #### Descrição de cada funcionalidade
-- Começando pela função de **normalizar polinómios**, esta ação é realizada pela função *reducePolinomial*. Primeiro todos os elementos são reduzidos (ou seja, x^2\*x^2 -> x^4). De seguida são filtrados todos os elementos que tenham o coeficiente 0, as variáveis que tenham expoente 0 são removidas (x^0 = 1, que é o elemento neutro da mutiplicação) e finalmente todos os *PolElement* que tenham uma lista de variáveis e graus iguais (as variáveis e graus de um termo são ordenadas para poder fazer a comparação entre termos) juntam-se no mesmo elemento e vêm os seus coeficientes somados. No final, os elementos são postos por ordem, primeiro surgem aqueles que têm mais variáveis, em caso de empate ordem alfabética das variáveis e em caso de empate grau, isto para ser possível comparar facilmente polinómios e ser também mais fácil a um utilizador de os ler.
+- Começando pela função de **normalizar polinómios**, esta ação é realizada pela função *reducePolinomial*. Primeiro todos os elementos são reduzidos (ou seja, x^2\*x^2 -> x^4). De seguida são filtrados todos os elementos que tenham o coeficiente 0, as variáveis que tenham expoente 0 são removidas (x^0 = 1, que é o elemento neutro da mutiplicação) e finalmente todos os *PolElement* que tenham uma lista de variáveis e graus iguais (as variáveis e graus de um termo são ordenadas para poder fazer a comparação entre termos) juntam-se no mesmo elemento e vêm os seus coeficientes somados. No final, os elementos são postos por ordem, primeiro surgem aqueles que têm mais variáveis, em caso de empate ordem alfabética das variáveis e em caso de empate grau. Isto é feito para ser possível comparar facilmente polinómios e ser também mais fácil a um utilizador de os ler.
 
 - A função de **adicionar polinómios** funciona de forma idêntica à de reduzir um polinómio. Na verdade, o ato de somar dois polinómios nada mais é do que juntar dois polinómios num só e reduzir o novo polinómio à forma normal. E foi exatamente isso que fizemos, na função *addPolinomial*.
 
@@ -44,3 +44,26 @@ Para correr o programa, basta ter os ficheiros necessários no mesmo diretório 
 
 - Mutiplicação <br>
 ![Mutiplying polinomials](https://i.imgur.com/byTGypS.png)
+
+**Com uso do QuickCheck:**
+
+Para correr os testes automáticos basta escrever numa linha de comando:
+
+``` 
+cabal update
+cabal install --lib QuickCheck
+ghci
+ghci> import Test.QuickCheck
+ghci> quickCheck ...(nome do teste)
+```
+
+Os três testes que temos disponíveis são:
+ - prop_Add
+ - prop_Mult
+ - prop_Reduce
+
+Ao correr os testes, apesar de os da adição e da redução funcionarem como esperado, o da multiplicação deu erro no arreondamento dos floats, algo que não conseguimos resolver.
+A primeira imagem mostra a mensagem de erro do teste:
+.......
+A segunda é o resultado do teste e mostra o valor diferente(1.9000001 /= 1.9)
+.......
