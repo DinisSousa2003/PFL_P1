@@ -43,7 +43,8 @@ Para correr o programa, basta ter os ficheiros necessários no mesmo diretório 
 ![Adding polinomials](https://i.imgur.com/1IFTRbN.png)
 
 - Mutiplicação <br>
-![Mutiplying polinomials](https://i.imgur.com/byTGypS.png)
+![Mutiplying polinomials](https://i.imgur.com/gJNmiLS.png)
+
 
 **Com uso do QuickCheck:**
 
@@ -63,7 +64,8 @@ Os três testes que temos disponíveis são:
  - prop_Reduce
 
 Ao correr os testes, apesar de os da adição e da redução funcionarem como esperado, o da multiplicação deu erro no arreondamento dos floats, algo que não conseguimos resolver.
-A primeira imagem mostra a mensagem de erro do teste:
-.......
-A segunda é o resultado do teste e mostra o valor diferente(1.9000001 /= 1.9)
-.......
+A primeira imagem mostra a mensagem de erro do teste:<br>
+![Error in prop_Mult](https://i.imgur.com/4Hj5iRe.png)
+
+A segunda é o resultado do teste e mostra o valor diferente(1.9000001 /= 1.9)<br>
+![Reason of error](https://i.imgur.com/Kx9ZVGM.png)
