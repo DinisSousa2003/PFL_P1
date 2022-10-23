@@ -33,7 +33,7 @@ main = do
     putStrLn (polynomialToString (addPolynomial (parseInit "4 -x^-3 - x^-3.0 + 32") (parseInit "-3.10*x^2*y^7.3 + 2*x^2*x^3")))
 
     putStrLn "\nTest 4: Add polynomials '0' and 'x'"
-    putStrLn "Expected: + 1.0*x^1.0"
+    putStrLn "Expected: + x"
     putStr "Result  : "
     putStrLn (polynomialToString (addPolynomial (parseInit "0") (parseInit "x")))
 
@@ -58,7 +58,7 @@ main = do
     putStrLn (polynomialToString (derivePolynomial (parseInit "2*x^2*y^3 - y^3 + 4*y^3 +0 - x") 'y'))
     
     putStrLn "\nTest 9: Derive polynomial '2*x^2*y^3 - y^3 + 4*y^3 +0 - x' for 'z'"
-    putStrLn "Expected: + 0.0"
+    putStrLn "Expected: 0"
     putStr "Result  : "
     putStrLn (polynomialToString (derivePolynomial (parseInit "2*x^2*y^3 - y^3 + 4*y^3 +0 - x") 'z'))
 

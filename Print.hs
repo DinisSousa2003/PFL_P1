@@ -13,10 +13,14 @@ polynomialToString (x:xs) = polElementToString x ++ " " ++ polynomialToString xs
 
 --Transform coeficient into string and append to the variables and grades
 polElementToString :: PolElement -> String
-polElementToString (c, vg) = signal ++ " " ++ show (abs c) ++ vgToString vg
+polElementToString (c, vg) = signal ++ " " ++ coef ++ mult ++ vgToString vg
                           where signal = if c > 0 then "+" else "-"
+                                coef = if (c == 1 || c == -1) && (vg /= []) then "" else show (abs c)
+                                mult = if coef /= "" && vg /= [] then "*" else ""
 
 --Transform the variables and grades to string recursively
 vgToString :: [(Char, Float)] -> String
 vgToString [] = []
-vgToString (x:xs) = "*" ++ [fst x] ++ "^" ++ show (snd x) ++ vgToString xs
+vgToString (x:xs) = [fst x] ++ exp ++ mult ++ vgToString xs
+                    where exp = if (snd x) == 1 then "" else "^" ++ show (snd x)
+                          mult = if null xs then "" else "*"

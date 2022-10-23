@@ -97,13 +97,7 @@ multPolyElem (c1, vg1) (c2, vg2) = reduceTerm ((c1 * c2), vg1 ++ vg2)
 {-Derive a polynomial in order to a given variable-}
 derivePolynomial :: Polynomial -> Char -> Polynomial
 derivePolynomial [] _ = []
-derivePolynomial p var = reducePolynomial (auxDerivePolynomial (removeIndependentTerm p) var)
-
-{-Remove all independent terms-}
-removeIndependentTerm :: Polynomial -> Polynomial
-removeIndependentTerm [] = []
-removeIndependentTerm poly | elemEqual (head poly) (1, []) = removeIndependentTerm(removeItem (head poly) poly)
-                           | otherwise = [head poly] ++ removeIndependentTerm (tail poly)
+derivePolynomial p var = reducePolynomial (auxDerivePolynomial p var)
 
 {-Derive each term in order to the variable-}
 auxDerivePolynomial :: Polynomial -> Char -> Polynomial
@@ -120,6 +114,6 @@ findVarElem (c, vg) var = case idx of
 
 {-Derive the element itself (coef * exp and exp--)-}
 deriveElem :: PolElement -> Int -> PolElement
-deriveElem pol (-1) = pol
+deriveElem pol (-1) = (0,[])
 deriveElem (c, vg) idx = (c * exp, replaceAtIndex idx (ch, exp - 1) vg)
                     where (ch, exp) = vg !! idx
