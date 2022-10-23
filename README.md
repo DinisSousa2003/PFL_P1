@@ -36,11 +36,11 @@ Para correr o programa, basta ter os ficheiros necessários no mesmo diretório 
 ```
 
 **Exemplos de utilização**
-- Redução e derivação
+- Redução e derivação <br>
 ![Reducing and deriving a polinomial](https://i.imgur.com/vMJGFu4.png)
 
-- Adição
+- Adição <br>
 ![Adding polinomials](https://i.imgur.com/1IFTRbN.png)
 
-- Mutiplicação
+- Mutiplicação <br>
 ![Mutiplying polinomials](https://i.imgur.com/byTGypS.png)
