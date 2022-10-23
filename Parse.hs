@@ -2,9 +2,7 @@
 module Parse where 
 import Data.List
 import Data.Char
-
-type PolElement = (Float, [(Char, Float)]) {-Coeficient, variable, grade-}
-type Polinomyal = [PolElement]
+import Logic
 
 parseInit :: String -> Polinomyal
 parseInit [] = []
