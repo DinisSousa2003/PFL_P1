@@ -1,5 +1,5 @@
 
-module Parse where 
+module Parse where
 import Data.List
 import Data.Char
 import Logic
@@ -26,7 +26,7 @@ parseNewTerm :: String -> PolElement
 parseNewTerm (' ':xs) = parseNewTerm xs
 parseNewTerm (x:xs)   | isNum x = ((parseNum (takeWhile isNum (x:xs)) 0), (parseExp2 [] (dropWhile isNum (x:xs))))
                         | isLetter x = (1,parseVariable [(x, 1)] xs)
-                        | otherwise  = (0, []) --inválido
+                        | otherwise  = error "Invalid Polinomyal"
 
 
 parseMult :: [(Char,Float)] -> String -> [(Char,Float)]
@@ -37,18 +37,18 @@ parseVariable :: [(Char,Float)] -> String -> [(Char,Float)]
 parseVariable vg [] = vg
 parseVariable vg (x:xs) | x == '^' = parseExp1 vg xs
                         | x == '*' = parseMult vg xs
-                        | otherwise = []  --inválido
+                        | otherwise = error "Invalid Polinomyal"  --inválido
 
 parseExp1 :: [(Char,Float)] -> String -> [(Char,Float)]
 parseExp1 vg (x:xs) | isNum x = parseExp2 (init vg ++ [(fst (last vg), (parseNum (takeWhile isNum (x:xs)) 0) )]) (dropWhile isNum (x:xs))
-                    | otherwise = [] --inválido
+                    | otherwise = error "Invalid Polinomyal" --inválido
 
 --Can be terminal
 parseExp2 :: [(Char,Float)] -> String -> [(Char,Float)]
 parseExp2 el [] = el
 parseExp2 vg (x:xs) | x == '*' = parseMult vg xs
                     | isLetter x = parseVariable [(x, 1)] xs
-                    | otherwise = [] -- inválido
+                    | otherwise = error "Invalid Polinomyal" -- inválido
 
 isNum :: Char -> Bool
 isNum n = (n == '.') || (n == '-') || ((ord n >= 48) && (ord n <= 57))
