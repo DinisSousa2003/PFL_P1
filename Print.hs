@@ -4,7 +4,7 @@ import Data.Char
 import Logic
 
 polinomyalToString :: Polinomyal -> String
-polinomyalToString [] = []
+polinomyalToString [] = "0"
 polinomyalToString (x:[]) = polElementToString x
 polinomyalToString (x:xs) = polElementToString x ++ " " ++ polinomyalToString xs
 
