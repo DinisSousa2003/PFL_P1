@@ -4,17 +4,19 @@ import Parse
 import Print
 import Logic
 
-
+-- Test for the associative property of addition
 prop_Add p1 p2 = polyEquals (addPolynomial p1 p2) (addPolynomial p2 p1)
   where types = (p1::Polynomial, p2:: Polynomial) 
 
+-- Test for the associative property of multiplication
 prop_Mult p1 p2 = polyEquals (multPolynomial p1 p2) (multPolynomial p2 p1)
   where types = (p1::Polynomial, p2:: Polynomial) 
 
+-- Test for applying the reduction twice
 prop_Reduce p1 = polyEquals (reducePolynomial p1) (reducePolynomial (reducePolynomial p1))
   where types = p1::Polynomial
 
-
+-- Tests for all operations
 main :: IO()
 main = do
     putStrLn "\nTest 1: Reduce polynomial '-3.10*x^2*y^7.3 + 2*x^2*x^3'"
