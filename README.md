@@ -11,7 +11,7 @@ type Polinomyal = [PolElement]
 ```
 
 #### Descrição de cada funcionalidade
-- Começando pela função de **normalizar polinómios**, esta ação é realizada pela função *reducePolinomial*. Primeiro todos os elementos são reduzidos (ou seja, x^2\*x^2 -> x^4). De seguida são filtrados todos os elementos que tenham o coeficiente 0, as variáveis que tenham expoente 0 são removidas (x^0 = 1, que é o elemento neutro da mutiplicação) e finalmente todos os *PolElement* que tenham uma lista de variáveis e graus iguais juntam-se no mesmo elemento e vêm os seus coeficientes somados.
+- Começando pela função de **normalizar polinómios**, esta ação é realizada pela função *reducePolinomial*. Primeiro todos os elementos são reduzidos (ou seja, x^2\*x^2 -> x^4). De seguida são filtrados todos os elementos que tenham o coeficiente 0, as variáveis que tenham expoente 0 são removidas (x^0 = 1, que é o elemento neutro da mutiplicação) e finalmente todos os *PolElement* que tenham uma lista de variáveis e graus iguais (as variáveis e graus de um termo são ordenadas para poder fazer a comparação entre termos) juntam-se no mesmo elemento e vêm os seus coeficientes somados. No final, os elementos são postos por ordem, primeiro surgem aqueles que têm mais variáveis, em caso de empate ordem alfabética das variáveis e em caso de empate grau, isto para ser possível comparar facilmente polinómios e ser também mais fácil a um utilizador de os ler.
 
 - A função de **adicionar polinómios** funciona de forma idêntica à de reduzir um polinómio. Na verdade, o ato de somar dois polinómios nada mais é do que juntar dois polinómios num só e reduzir o novo polinómio à forma normal. E foi exatamente isso que fizemos, na função *addPolinomial*.
 
