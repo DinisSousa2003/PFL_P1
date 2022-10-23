@@ -63,8 +63,8 @@ compareExp (x:xs) (y:ys) | (snd x) /= (snd y) = compare (snd y) (snd x)
                          | otherwise = compareExp xs ys
 
 {-Returns true if two polynomials are equal to each other-}
-poliEquals :: Polynomial -> Polynomial -> Bool
-poliEquals p1 p2  | (length xs) /= (length ys) = False
+polyEquals :: Polynomial -> Polynomial -> Bool
+polyEquals p1 p2  | (length xs) /= (length ys) = False
                   | otherwise = all (==EQ) [compareTerms (xs !! i) (ys !! i) | i <- [0..(length xs - 1)]]
                   where xs = reducePolynomial p1
                         ys = reducePolynomial p2
@@ -88,11 +88,11 @@ auxMultPolynomial p1 (p2head : p2tail) = multPolynomialByElem p1 p2head ++ auxMu
 
 {-Mutiply all terms of a polynomial by an element-}
 multPolynomialByElem :: Polynomial -> PolElement -> Polynomial
-multPolynomialByElem p1 pElem = Data.List.map (multPoliElem pElem) p1
+multPolynomialByElem p1 pElem = Data.List.map (multPolyElem pElem) p1
 
 {-Mutiply two polynomials terms-}
-multPoliElem :: PolElement -> PolElement -> PolElement
-multPoliElem (c1, vg1) (c2, vg2) = reduceTerm ((c1 * c2), vg1 ++ vg2)
+multPolyElem :: PolElement -> PolElement -> PolElement
+multPolyElem (c1, vg1) (c2, vg2) = reduceTerm ((c1 * c2), vg1 ++ vg2)
 
 {-Derive a polynomial in order to a given variable-}
 derivePolynomial :: Polynomial -> Char -> Polynomial
@@ -102,8 +102,8 @@ derivePolynomial p var = reducePolynomial (auxDerivePolynomial (removeIndependen
 {-Remove all independent terms-}
 removeIndependentTerm :: Polynomial -> Polynomial
 removeIndependentTerm [] = []
-removeIndependentTerm poli | elemEqual (head poli) (1, []) = removeIndependentTerm(removeItem (head poli) poli)
-                           | otherwise = [head poli] ++ removeIndependentTerm (tail poli)
+removeIndependentTerm poly | elemEqual (head poly) (1, []) = removeIndependentTerm(removeItem (head poly) poly)
+                           | otherwise = [head poly] ++ removeIndependentTerm (tail poly)
 
 {-Derive each term in order to the variable-}
 auxDerivePolynomial :: Polynomial -> Char -> Polynomial
