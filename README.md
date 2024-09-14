@@ -1,6 +1,12 @@
-## Trabalho 1 PFL - G01_07
+# Polynomial Calculator
 
-### Dinis Sousa e Francisca Silva
+## PFL 2022/23 - 3rd Year
+## Functional and Logic Programming
+
+## Description
+
+Polynomial Calculator,used to normalize, multiply, derive, read and write polynomials. Developed using Haskell
+
 
 #### Escolha da representação interna dos polinómios:
 Os polinómios estão representados como uma lista de elementos de um polinómio (monómios). Estes elementos são representados por um par (coeficiente, lista de pares variável e grau). Escolhemos esta representação de forma a permitir que um elemento de um polinómio tivesse várias variáveis, cada uma com um grau diferente e ambos estivessem associados um ao outro num par. Cada elemento tem apenas um coeficiente e uma lista de variáveis e graus, logo associá-los também num par pareceu lógico. O polinómio ser um conjunto de monómios parte da definição de polinómio, e achamos que coloca-los numa lista seria uma boa opção.
